@@ -17,7 +17,7 @@ public class MessageController {
     @PostMapping
     @ResponseBody
     public Integer addMessage(@RequestBody String message){
-       return service.addMessage(message);
+       return service.addMessage(message).getId();
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -34,7 +34,7 @@ public class MessageController {
     @PutMapping
     @ResponseBody
     public Integer updateMessage(@RequestBody MessageDTO dto){
-        return service.updateMessage(dto);
+        return service.updateMessage(dto).getId();
     }
 
     @DeleteMapping(value = "/{id}")
