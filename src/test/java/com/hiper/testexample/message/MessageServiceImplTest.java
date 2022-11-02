@@ -39,9 +39,6 @@ class MessageServiceImplTest {
 
     @Test
     void addMessage() {
-        MessageDTO dto = new MessageDTO();
-        dto.setId(1);
-        dto.setMessage("test");
         when(repository.save(entityMock)).thenReturn(entityMock);
         MessageDTO res = service.addMessage("test");
         assertThat(res).isNull();
@@ -68,7 +65,7 @@ class MessageServiceImplTest {
         dto.setMessage("test");
         when(repository.findById(1)).thenReturn(Optional.of(entityMock));
         when(repository.save(entityMock)).thenReturn(entityMock);
-        MessageDTO res = service.addMessage("test");
+        MessageDTO res = service.updateMessage(dto);
         assertThat(res).isNull();
     }
 
