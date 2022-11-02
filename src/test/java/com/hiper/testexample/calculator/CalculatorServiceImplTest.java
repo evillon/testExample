@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @WebMvcTest(CalculatorServiceImpl.class)
 @ExtendWith(SpringExtension.class)
@@ -50,6 +51,15 @@ class CalculatorServiceImplTest {
         Double valor2 = 5.0;
         Double result = service.div(valor1,valor2);
         assertEquals(1,result);
+    }
+
+    @Test
+    void divPorCero(){
+        Double valor1 = 5.0;
+        Double valor2 = 0.0;
+
+        //assertEquals(1,result);
+        assertThrows(IllegalStateException.class,()->service.div(valor1,valor2));
     }
 
 }

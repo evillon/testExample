@@ -1,28 +1,35 @@
 package com.hiper.testexample.message;
 
 import com.google.gson.Gson;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository repository;
 
     private final Gson gson = new Gson();
 
+    private MessageEntity messageEntity = new MessageEntity();
+
     public MessageServiceImpl(MessageRepository repository) {
         this.repository = repository;
     }
 
-    public Integer addMessage(String message) {
+    public MessageDTO addMessage(String message) {
         MessageEntity entity = new MessageEntity();
         entity.setMessage(message);
         entity.setFechaRegistro(new Date());
-        return repository.save(entity).getId();
+        messageEntity = repository.save(entity);
+        log.trace(messageEntity);
+        return convertToDTO(messageEntity);
     }
 
     @Override
@@ -36,10 +43,19 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Integer updateMessage(MessageDTO dto) {
+    public MessageDTO updateMessage(MessageDTO dto) {
+
+        Optional<MessageEntity> messageEntityOptional = repository.findById(dto.getId());
+
+        if (messageEntityOptional.isEmpty())
+            throw new IllegalStateException("No de encontro Informacion solicitada");
+
         MessageEntity entity = convertToEntity(dto);
         entity.setFechaModifica(new Date());
-        return repository.save(entity).getId();
+        entity.setFechaRegistro(messageEntityOptional.get().fechaRegistro);
+        messageEntity = repository.save(entity);
+        log.trace(messageEntity);
+        return convertToDTO(messageEntity);
     }
 
     @Override
