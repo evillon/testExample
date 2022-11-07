@@ -13,7 +13,7 @@ public class MessageTestController {
     private final MessageTestService service;
 
     @Autowired
-    public MessageTestController(MessageTestServiceImpl service) {
+    public MessageTestController(MessageTestService service) {
         this.service = service;
     }
 
@@ -34,13 +34,13 @@ public class MessageTestController {
         return service.getMessageById(id);
     }
 
-    @PutMapping(value = "/put")
+    @PutMapping(value = "/put", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Integer updateMessage(@RequestBody MessageTestDTO dto){
-        return service.updateMessage(dto).getId();
+    public MessageTestDTO updateMessage(@RequestBody MessageTestDTO dto){
+        return service.updateMessage(dto);
     }
 
-    @DeleteMapping(value = "/get/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     @ResponseBody
     public void deleteMessage(@PathVariable Integer id){
         service.deleteMessageById(id);

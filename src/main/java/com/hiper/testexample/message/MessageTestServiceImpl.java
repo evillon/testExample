@@ -66,12 +66,10 @@ public class MessageTestServiceImpl implements MessageTestService {
     }
 
     private MessageTestEntity convertToEntity(MessageTestDTO dto) {
-
         return gson.fromJson(gson.toJson(dto), MessageTestEntity.class);
     }
 
     private MessageTestDTO convertToDTO(MessageTestEntity entity) {
-
         return gson.fromJson(gson.toJson(entity), MessageTestDTO.class);
     }
 

@@ -28,25 +28,25 @@ class MessageTestControllerTest {
     @MockBean
     private MessageTestRepository repository;
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private MessageTestRequest dto;
-
+    private MessageTestDTO dto;
 
     @Test
     void addMessage() throws  Exception{
         assertThat(service).isNotNull();
-        dto = new MessageTestRequest();
-        dto.setMessage("hola");
+        MessageTestRequest request = new MessageTestRequest();
+        request.setMessage("hola");
         mockMvc.perform(post("/message/add")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(dto)))
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().is(HttpStatus.OK.value()));
     }
 
     @Test
     void getMessage() throws Exception {
-        mockMvc.perform(get("/message/add")
+        mockMvc.perform(get("/message/get")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         )
                 .andExpect(status().is(HttpStatus.OK.value()));
@@ -54,7 +54,7 @@ class MessageTestControllerTest {
 
     @Test
     void getMessageById() throws  Exception{
-        mockMvc.perform(get("/message/add/1")
+        mockMvc.perform(get("/message/get/1")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andExpect(status().is(HttpStatus.OK.value()));
@@ -62,15 +62,21 @@ class MessageTestControllerTest {
 
     @Test
     void updateMessage() throws Exception{
-        mockMvc.perform(put("/message/add")
+
+        dto = new MessageTestDTO();
+        dto.setId(1);
+        dto.setMessage("hola");
+
+        mockMvc.perform(put("/message/put")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().is(HttpStatus.OK.value()));
     }
 
     @Test
     void deleteMessage() throws Exception{
-        mockMvc.perform(delete("/message/add/1")
+        mockMvc.perform(delete("/message/delete/1")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                 )
                 .andExpect(status().is(HttpStatus.OK.value()));
