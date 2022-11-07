@@ -13,34 +13,50 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(MessageServiceImpl.class)
+@WebMvcTest(MessageTestServiceImpl.class)
 class MessageServiceImplTest {
 
     @Autowired
-    private MessageService service;
+    private MessageTestService service;
 
     @MockBean
-    private MessageRepository repository;
+    private MessageTestRepository repository;
 
     @Mock
-    private MessageEntity entityMock;
+    private MessageTestEntity entityMock;
+
+    @Mock
+    private MessageTestRequest request;
+
+    @Mock
+    private MessageTestDTO dto;
 
     @BeforeEach
     void setUp() {
-        entityMock = new MessageEntity();
+        entityMock = new MessageTestEntity();
+        entityMock.setId(1);
         entityMock.setMessage("test");
         entityMock.setFechaRegistro(new Date());
+        entityMock.setFechaModifica(new Date());
+
+        request = new MessageTestRequest();
+        request.setMessage("test");
+
+        dto = new MessageTestDTO();
+        dto.setId(1);
+        dto.setMessage("test");
+
     }
 
     @Test
     void addMessage() {
         when(repository.save(entityMock)).thenReturn(entityMock);
-        MessageDTO res = service.addMessage("test");
+        MessageTestDTO res = service.addMessage(request);
         assertThat(res).isNull();
     }
 
@@ -54,18 +70,15 @@ class MessageServiceImplTest {
     @Test
     void getMessageById() {
         when(repository.findById(1)).thenReturn(Optional.of(entityMock));
-        assertThat(service.getMessage()).isEmpty();
-        verify(repository, times(1)).findAll();
+        assertThat(service.getMessageById(1)).isNotNull();
+        verify(repository, times(1)).findById(1);
     }
 
     @Test
     void updateMessage() {
-        MessageDTO dto = new MessageDTO();
-        dto.setId(1);
-        dto.setMessage("test");
         when(repository.findById(1)).thenReturn(Optional.of(entityMock));
         when(repository.save(entityMock)).thenReturn(entityMock);
-        MessageDTO res = service.updateMessage(dto);
+        MessageTestDTO res = service.updateMessage(dto);
         assertThat(res).isNull();
     }
 
@@ -74,5 +87,13 @@ class MessageServiceImplTest {
        willDoNothing().given(repository).deleteById(1);
        service.deleteMessageById(1);
        verify(repository).deleteById(1);
+    }
+
+    @Test
+    void updateExceptionValue() {
+        when(repository.save(entityMock)).thenReturn(entityMock);
+        when(repository.findById(1)).thenReturn(Optional.empty());
+        dto.setId(null);
+        assertThrows(IllegalStateException.class,()->service.updateMessage(dto));
     }
 }

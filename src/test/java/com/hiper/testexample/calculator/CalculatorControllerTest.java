@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(CalculatorController.class)
@@ -26,6 +26,7 @@ class CalculatorControllerTest {
 
     @BeforeEach
     void setUp() {
+        assertThat(service).isNotNull();
     }
 
     @Test
