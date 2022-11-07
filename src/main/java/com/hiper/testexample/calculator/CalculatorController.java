@@ -1,13 +1,16 @@
 package com.hiper.testexample.calculator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/calculator")
 public class CalculatorController {
 
+
     private final CalculatorService service;
 
+    @Autowired
     public CalculatorController(CalculatorService service) {
         this.service = service;
     }

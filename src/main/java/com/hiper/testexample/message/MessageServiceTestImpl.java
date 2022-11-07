@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Log4j2
-public class MessageServiceImpl implements MessageService {
+public class MessageServiceTestImpl implements MessageServiceTest {
 
     private final MessageRepository repository;
 
@@ -19,13 +19,13 @@ public class MessageServiceImpl implements MessageService {
 
     private MessageEntity messageEntity = new MessageEntity();
 
-    public MessageServiceImpl(MessageRepository repository) {
+    public MessageServiceTestImpl(MessageRepository repository) {
         this.repository = repository;
     }
 
-    public MessageDTO addMessage(String message) {
+    public MessageDTO addMessage(MessageRequest dto) {
         MessageEntity entity = new MessageEntity();
-        entity.setMessage(message);
+        entity.setMessage(dto.getMessage());
         entity.setFechaRegistro(new Date());
         messageEntity = repository.save(entity);
         log.trace(messageEntity);

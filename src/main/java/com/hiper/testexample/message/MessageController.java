@@ -1,5 +1,6 @@
 package com.hiper.testexample.message;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -8,36 +9,37 @@ import java.util.List;
 @RequestMapping(value = "/message")
 public class MessageController {
 
-    private final MessageService service;
+    private final MessageServiceTest service;
 
-    public MessageController(MessageServiceImpl service) {
+    @Autowired
+    public MessageController(MessageServiceTestImpl service) {
         this.service = service;
     }
 
-    @PostMapping
+    @PostMapping(value = "/add",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Integer addMessage(@RequestBody String message){
-       return service.addMessage(message).getId();
+    public MessageDTO addMessage(@RequestBody MessageRequest dto){
+       return service.addMessage(dto);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/get",produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<MessageDTO> getMessage(){
         return service.getMessage();
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public MessageDTO getMessageById(@PathVariable Integer id){
         return service.getMessageById(id);
     }
 
-    @PutMapping
+    @PutMapping(value = "/put")
     @ResponseBody
     public Integer updateMessage(@RequestBody MessageDTO dto){
         return service.updateMessage(dto).getId();
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/get/{id}")
     @ResponseBody
     public void deleteMessage(@PathVariable Integer id){
         service.deleteMessageById(id);

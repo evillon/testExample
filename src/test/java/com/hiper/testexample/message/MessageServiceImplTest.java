@@ -18,11 +18,11 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(MessageServiceImpl.class)
+@WebMvcTest(MessageServiceTestImpl.class)
 class MessageServiceImplTest {
 
     @Autowired
-    private MessageService service;
+    private MessageServiceTest service;
 
     @MockBean
     private MessageRepository repository;
@@ -30,17 +30,24 @@ class MessageServiceImplTest {
     @Mock
     private MessageEntity entityMock;
 
+    @Mock
+    private MessageRequest dto;
+
     @BeforeEach
     void setUp() {
         entityMock = new MessageEntity();
         entityMock.setMessage("test");
         entityMock.setFechaRegistro(new Date());
+
+        dto = new MessageRequest();
+        dto.setMessage("test");
+
     }
 
     @Test
     void addMessage() {
         when(repository.save(entityMock)).thenReturn(entityMock);
-        MessageDTO res = service.addMessage("test");
+        MessageDTO res = service.addMessage(dto);
         assertThat(res).isNull();
     }
 
