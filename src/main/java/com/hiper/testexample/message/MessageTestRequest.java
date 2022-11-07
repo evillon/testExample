@@ -3,7 +3,7 @@ package com.hiper.testexample.message;
 import lombok.Data;
 
 @Data
-public class MessageRequest {
+public class MessageTestRequest {
 
     private String message;
 

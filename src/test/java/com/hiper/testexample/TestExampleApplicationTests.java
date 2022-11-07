@@ -1,10 +1,10 @@
 package com.hiper.testexample;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hiper.testexample.message.MessageEntity;
-import com.hiper.testexample.message.MessageRepository;
-import com.hiper.testexample.message.MessageRequest;
-import com.hiper.testexample.message.MessageServiceTest;
+import com.hiper.testexample.message.MessageTestEntity;
+import com.hiper.testexample.message.MessageTestRepository;
+import com.hiper.testexample.message.MessageTestRequest;
+import com.hiper.testexample.message.MessageTestService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,28 +32,28 @@ class TestExampleApplicationTests {
     private MockMvc mockMvc;
 
     @MockBean
-    private MessageServiceTest service;
+    private MessageTestService service;
 
     @MockBean
-    private MessageRepository repository;
+    private MessageTestRepository repository;
 
     private ObjectMapper objectMapper;
 
-    private MessageRequest messageRequest;
+    private MessageTestRequest messageTestRequest;
 
     @Mock
-    MessageEntity entityMock;
+    MessageTestEntity entityMock;
 
     @Test
     void contextLoads() throws Exception {
         assertThat(service).isNotNull();
 
-        messageRequest = new MessageRequest();
-        messageRequest.setMessage("hola");
+        messageTestRequest = new MessageTestRequest();
+        messageTestRequest.setMessage("hola");
 
         mockMvc.perform(post("/message")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(messageRequest)))
+                        .content(objectMapper.writeValueAsString(messageTestRequest)))
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andReturn().getResponse().getContentAsString();
 

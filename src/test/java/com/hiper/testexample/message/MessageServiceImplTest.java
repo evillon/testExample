@@ -18,28 +18,28 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(MessageServiceTestImpl.class)
+@WebMvcTest(MessageTestServiceImpl.class)
 class MessageServiceImplTest {
 
     @Autowired
-    private MessageServiceTest service;
+    private MessageTestService service;
 
     @MockBean
-    private MessageRepository repository;
+    private MessageTestRepository repository;
 
     @Mock
-    private MessageEntity entityMock;
+    private MessageTestEntity entityMock;
 
     @Mock
-    private MessageRequest dto;
+    private MessageTestRequest dto;
 
     @BeforeEach
     void setUp() {
-        entityMock = new MessageEntity();
+        entityMock = new MessageTestEntity();
         entityMock.setMessage("test");
         entityMock.setFechaRegistro(new Date());
 
-        dto = new MessageRequest();
+        dto = new MessageTestRequest();
         dto.setMessage("test");
 
     }
@@ -47,7 +47,7 @@ class MessageServiceImplTest {
     @Test
     void addMessage() {
         when(repository.save(entityMock)).thenReturn(entityMock);
-        MessageDTO res = service.addMessage(dto);
+        MessageTestDTO res = service.addMessage(dto);
         assertThat(res).isNull();
     }
 
@@ -67,12 +67,12 @@ class MessageServiceImplTest {
 
     @Test
     void updateMessage() {
-        MessageDTO dto = new MessageDTO();
+        MessageTestDTO dto = new MessageTestDTO();
         dto.setId(1);
         dto.setMessage("test");
         when(repository.findById(1)).thenReturn(Optional.of(entityMock));
         when(repository.save(entityMock)).thenReturn(entityMock);
-        MessageDTO res = service.updateMessage(dto);
+        MessageTestDTO res = service.updateMessage(dto);
         assertThat(res).isNull();
     }
 

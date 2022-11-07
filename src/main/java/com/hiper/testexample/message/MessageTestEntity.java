@@ -13,7 +13,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class MessageEntity {
+public class MessageTestEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
@@ -25,7 +25,7 @@ public class MessageEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        MessageEntity that = (MessageEntity) o;
+        MessageTestEntity that = (MessageTestEntity) o;
         return id != null && Objects.equals(id, that.id);
     }
 
